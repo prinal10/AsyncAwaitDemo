@@ -1,0 +1,70 @@
+//http://data.fixer.io/api/latest?access_key=5e40cff57055fedb9a509ff4fbb95f8b
+
+const axios = require("axios");
+
+/*const getExchangeRate = (from, to) => {
+    return axios.get("http://data.fixer.io/api/latest?access_key=5e40cff57055fedb9a509ff4fbb95f8b").then((response) => {
+        const euro = 1 / response.data.rates[from];
+        const rate = euro * response.data.rates[to];
+        return rate;
+    });
+};*/
+
+const getExchangeRate = async (from, to) => {
+    const response = await axios.get("http://data.fixer.io/api/latest?access_key=5e40cff57055fedb9a509ff4fbb95f8b");
+    const euro = 1 / response.data.rates[from];
+    const rate = euro * response.data.rates[to];
+    return rate;
+};
+
+/*const getCountries = (currencyCode) => {
+    return axios.get("https://restcountries.eu/rest/v2/currency/" + currencyCode).then((response) => {
+        return response.data.map((country) => {
+            return country.name;
+        });
+    }).catch((error) => {
+        console.log(error);
+    });
+};*/
+
+const getCountries = async (currencyCode) => {
+    const response = await axios.get("https://restcountries.eu/rest/v2/currency/" + currencyCode);
+    return response.data.map((country) => {
+        return country.name;
+    });
+};
+
+/*const convertCurrency = (from, to, amount) => {
+    let convertedAmount;
+    return getExchangeRate(from, to).then((rate) => {
+        convertedAmount = amount * rate;
+        console.log(convertedAmount);
+        return getCountries(to);
+    }).then((countries) => {
+        return `${amount} ${from} is worth ${convertedAmount} ${to}. You can spend it in the following countries: ${countries.join(', ')}`;
+    });
+};*/
+
+const convertCurrency = async (from, to, amount) => {
+    let convertedAmount = await getExchangeRate(from, to) * amount;
+    let countries = await getCountries(to);
+    return `${amount} ${from} is worth ${convertedAmount} ${to}. You can spend it in the following countries: ${countries.join(', ')}`;
+};
+
+convertCurrency('USD', 'CAD', 20).then((string) => {
+    console.log(string);
+}).catch((error) => {
+    console.log(error);
+});
+
+
+getExchangeRate("USD", "CAD").then((rate) => {
+    console.log(rate);
+}).catch((error) => {
+    console.log(error);
+});
+getCountries("CAD").then((countriesList) => {
+    console.log(countriesList);
+}).catch((error) => {
+    console.log(error);
+});
