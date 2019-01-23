@@ -68,3 +68,22 @@ getCountries("CAD").then((countriesList) => {
 }).catch((error) => {
     console.log(error);
 });
+
+const add = async (a, b) => a + b + c;
+
+
+const doWork = async () => {
+    try {
+        return await add(12, 13);
+
+    } catch (e) {
+        console.log("Add function not working");
+        return 0;
+    }
+};
+
+doWork().then((data) => {
+    console.log(data);
+}).catch((error) => {
+    console.log("falling to catch value: " + error);
+});
